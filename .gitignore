@@ -2,3 +2,7 @@ node_modules/
 dist/
 *.env
 .DS_Store
+/.idea/jsLibraryMappings.xml
+/.idea/modules.xml
+/.idea/vanlife_react_router.iml
+/.idea/vcs.xml
