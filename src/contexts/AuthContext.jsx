@@ -50,6 +50,17 @@ function AuthProvider({ children }) {
     }
 
     async function updateUser(email, password) {
+        try {
+            if (email !== currentUser.email) {
+                await updateEmail(auth.currentUser, email);
+            }
+            if (password && password !== currentUser.password) {
+                await updatePassword(auth.currentUser, password);
+            }
+            return redirect('/profile');
+        } catch(err) {
+            return err.message;
+        }
 
     }
 
@@ -58,6 +69,7 @@ function AuthProvider({ children }) {
         signup,
         login,
         logout,
+        updateUser,
     }
 
     return (

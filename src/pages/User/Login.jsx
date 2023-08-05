@@ -24,7 +24,7 @@ export const action = (AuthContext) => async({ request }) => {
     const password = formData.get("password")
     const pathname = new URL(request.url)
         .searchParams.get("redirectTo") || "/profile"
-    
+    console.log(pathname);
     return login(email, password, pathname);
 }
 
