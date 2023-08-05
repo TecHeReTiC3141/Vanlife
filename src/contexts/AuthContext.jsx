@@ -5,6 +5,7 @@ import { signInWithEmailAndPassword,
     signOut,
     updatePassword,
     updateEmail,
+    sendPasswordResetEmail,
 } from 'firebase/auth';
 import {redirect} from "react-router-dom";
 
@@ -61,7 +62,15 @@ function AuthProvider({ children }) {
         } catch(err) {
             return err.message;
         }
+    }
 
+    async function resetPassword(email) {
+        try {
+            await sendPasswordResetEmail(auth, email);
+            return 'Check your inbox';
+        } catch (err) {
+            return err.message;
+        }
     }
 
     const value = {
@@ -70,6 +79,7 @@ function AuthProvider({ children }) {
         login,
         logout,
         updateUser,
+        resetPassword,
     }
 
     return (

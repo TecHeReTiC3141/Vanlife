@@ -10,14 +10,14 @@ import {
 import {requireNonAuth} from "../../../utils";
 
 
-export const loader = (authContext) => async ({ request }) => {
+export const loader = (authContext) => async ({request}) => {
     await requireNonAuth(authContext, request);
     return new URL(request.url).searchParams.get("message")
 }
 
-export const action = (AuthContext) => async({ request }) => {
+export const action = (AuthContext) => async ({request}) => {
 
-    const { login } = AuthContext;
+    const {login} = AuthContext;
 
     const formData = await request.formData()
     const email = formData.get("email")
@@ -37,11 +37,11 @@ export default function Login() {
         <div className="login-container flex flex-col justify-center items-center h-full">
             <h1 className="font-bold text-2xl my-4">Log in to your account</h1>
             {message && <h3 className="red my-2">{message}</h3>}
-            {errorMessage && <h3 className="bg-red-300 my-2">{errorMessage}</h3>}
+            {errorMessage && <h3 className="bg-red-300 my-2 px-2 py-1 rounded">{errorMessage}</h3>}
 
-            <Form 
-                method="post" 
-                className="login-form" 
+            <Form
+                method="post"
+                className="login-form"
                 replace
             >
                 <input
@@ -56,6 +56,8 @@ export default function Login() {
                     placeholder="Password"
                     className="w-full mb-4 mt-1 border border-gray-400 focus:outline-blue-300 rounded py-1.5 indent-2"
                 />
+
+                <Link to="/reset-password" className="text-center decorated">Forgot password?</Link>
                 <button
                     disabled={navigation.state === "submitting"}
                 >
@@ -66,7 +68,7 @@ export default function Login() {
                 </button>
             </Form>
             <h3>Don't have an account yet? <Link to="/signup"
-                                            className="text-blue-400 hover:underline hover:text-blue-500">Sign up</Link></h3>
+                                                 className="decorated">Sign up</Link></h3>
         </div>
     )
 }

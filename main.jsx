@@ -22,13 +22,14 @@ import HostVanPhotos from "./src/pages/Host/HostVanPhotos"
 import NotFound from "./src/pages/NotFound"
 import Login, {loader as loginLoader, action as loginAction} from "./src/pages/User/Login"
 import Signup, {loader as signupLoader, action as signupAction} from "./src/pages/User/Signup"
+import ResetPassword, {action as resetPasswordAction} from "./src/pages/User/ResetPassword";
 import ProfileLayout, {loader as profileLoader} from "./src/pages/User/ProfileLayout";
 import Profile from './src/pages/User/Profile';
 import UpdateProfile, {action as updateProfileAction} from "./src/pages/User/UpdateProfile";
 import Layout from "./src/components/Layout"
 import HostLayout from "./src/components/HostLayout"
 import Error from "./src/components/Error"
-import {requireAuth} from "./utils";
+import {requireAuth, requireNonAuth} from "./utils";
 import AuthProvider, {useAuth,} from './src/contexts/AuthContext';
 
 function App() {
@@ -45,6 +46,16 @@ function App() {
                 loader={loginLoader(authContext)}
                 action={loginAction(authContext)}
             />
+
+            <Route
+                path="reset-password"
+                element={<ResetPassword/>}
+                loader={async ({request}) =>
+                    await requireNonAuth(authContext, request)}
+                action={resetPasswordAction(authContext)}
+            />
+
+
 
             <Route
                 path="signup"
