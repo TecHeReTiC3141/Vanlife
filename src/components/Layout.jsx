@@ -7,7 +7,7 @@ export default function Layout() {
     return (
         <div className="site-wrapper">
             <Header />
-            <main>
+            <main className="grow">
                 <Outlet />
             </main>
             <Footer />
