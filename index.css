@@ -1,3 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+
+}
+
 * {
     box-sizing: border-box;
 }
@@ -120,7 +128,7 @@ footer {
 
 /*** HOME PAGE ***/
 .home-container {
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.46), rgba(0, 0, 0, 0.46)), url("./assets/images/home-hero.png") no-repeat center center;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.46), rgba(0, 0, 0, 0.46)), url("./src/assets/images/home-hero.png") no-repeat center center;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -225,7 +233,7 @@ footer {
 
 .van-tile a {
     color: #161616;
-    text-decoration: none;    
+    text-decoration: none;
 }
 
 .van-tile img {
@@ -301,7 +309,7 @@ i[class*='van-type-'] {
 }
 
 .van-detail-container .back-button:visited {
-    
+
 }
 
 .van-detail-container .back-button span {
@@ -500,7 +508,7 @@ i[class*='van-type-'] {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 500px;    
+    max-width: 500px;
 }
 
 .login-form > input {

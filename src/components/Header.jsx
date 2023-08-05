@@ -1,6 +1,6 @@
 import React from "react"
 import { Link, NavLink } from "react-router-dom"
-import avatarImg from '/assets/images/avatar-icon.png'
+import avatarImg from '/src/assets/images/avatar-icon.png'
 
 export default function Header() {
     const activeStyles = {
