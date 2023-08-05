@@ -5,7 +5,7 @@ import {redirect} from "react-router-dom";
 
 const AuthContext = React.createContext();
 
-export function getAuth() {
+export function useAuth() {
     return React.useContext(AuthContext);
 }
 
@@ -52,4 +52,4 @@ function AuthProvider({ children }) {
     );
 }
 
-export default AuthContext;
+export default AuthProvider;
