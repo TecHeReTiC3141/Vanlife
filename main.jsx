@@ -21,14 +21,12 @@ import HostVanPricing from "./src/pages/Host/HostVanPricing"
 import HostVanPhotos from "./src/pages/Host/HostVanPhotos"
 import NotFound from "./src/pages/NotFound"
 import Login, {loader as loginLoader, action as loginAction} from "./src/pages/User/Login"
+import Signup, {loader as signupLoader, action as signupAction} from "./src/pages/User/Signup"
 import Layout from "./src/components/Layout"
 import HostLayout from "./src/components/HostLayout"
 import Error from "./src/components/Error"
 import {requireAuth} from "./utils";
 import AuthProvider, {useAuth,} from './src/contexts/AuthContext';
-
-import "./server"
-
 
 function App() {
 
@@ -42,7 +40,14 @@ function App() {
                 path="login"
                 element={<Login/>}
                 loader={loginLoader}
-                action={loginAction}
+                action={loginAction(authContext)}
+            />
+
+            <Route
+                path="signup"
+                element={<Signup/>}
+                loader={signupLoader}
+                action={signupAction(authContext)}
             />
             <Route
                 path="vans"

@@ -1,5 +1,5 @@
 import React from 'react';
-import { auth } from '../../firebase';
+import { auth, checkNetworkConnectivity } from '../../firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, } from 'firebase/auth';
 import {redirect} from "react-router-dom";
 
@@ -30,10 +30,11 @@ function AuthProvider({ children }) {
         }
     }
 
-    async function login(email, password) {
+    async function login(email, password, pathname) {
         try {
+            // await checkNetworkConnectivity(); // check network connectivity
             await signInWithEmailAndPassword(auth, email, password);
-            return redirect('/profile');
+            return redirect(pathname);
         } catch (err) {
             return err.message;
         }

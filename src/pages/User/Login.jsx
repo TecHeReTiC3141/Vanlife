@@ -4,7 +4,8 @@ import {
     useNavigation,
     Form,
     redirect,
-    useActionData
+    useActionData,
+    Link,
 } from "react-router-dom"
 import { loginUser } from "../../../api"
 
@@ -12,20 +13,17 @@ export function loader({ request }) {
     return new URL(request.url).searchParams.get("message")
 }
 
-export async function action({ request }) {
+export const action = (AuthContext) => async({ request }) => {
+
+    const { login } = AuthContext;
+
     const formData = await request.formData()
     const email = formData.get("email")
     const password = formData.get("password")
     const pathname = new URL(request.url)
-        .searchParams.get("redirectTo") || "/host"
+        .searchParams.get("redirectTo") || "/profile"
     
-    try {
-        const data = await loginUser({ email, password })
-        localStorage.setItem("loggedin", true)
-        return redirect(pathname)
-    } catch(err) {
-        return err.message
-    }
+    return login(email, password, pathname);
 }
 
 export default function Login() {
@@ -34,10 +32,10 @@ export default function Login() {
     const navigation = useNavigation()
 
     return (
-        <div className="login-container">
-            <h1>Sign in to your account</h1>
-            {message && <h3 className="red">{message}</h3>}
-            {errorMessage && <h3 className="red">{errorMessage}</h3>}
+        <div className="login-container flex flex-col justify-center items-center h-full">
+            <h1 className="font-bold text-2xl my-4">Log in to your account</h1>
+            {message && <h3 className="red my-2">{message}</h3>}
+            {errorMessage && <h3 className="bg-red-300 my-2">{errorMessage}</h3>}
 
             <Form 
                 method="post" 
@@ -48,11 +46,13 @@ export default function Login() {
                     name="email"
                     type="email"
                     placeholder="Email address"
+                    className="w-full mb-4 mt-1 border border-gray-400 focus:outline-blue-300 rounded py-1.5 indent-2"
                 />
                 <input
                     name="password"
                     type="password"
                     placeholder="Password"
+                    className="w-full mb-4 mt-1 border border-gray-400 focus:outline-blue-300 rounded py-1.5 indent-2"
                 />
                 <button
                     disabled={navigation.state === "submitting"}
@@ -63,6 +63,8 @@ export default function Login() {
                     }
                 </button>
             </Form>
+            <h3>Don't have an account yet? <Link to="/signup"
+                                            className="text-blue-400 hover:underline hover:text-blue-500">Sign up</Link></h3>
         </div>
     )
 }
