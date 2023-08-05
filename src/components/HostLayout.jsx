@@ -40,6 +40,13 @@ export default function HostLayout() {
                     Reviews
                 </NavLink>
 
+                <NavLink
+                    to="add-van"
+                    style={({ isActive }) => isActive ? activeStyles : null}
+                >
+                    Add new van
+                </NavLink>
+
             </nav>
             <Outlet />
         </>

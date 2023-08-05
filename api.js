@@ -1,23 +1,39 @@
 import { db } from './firebase';
 import {
-    collection,
-    doc,
-    getDoc,
-    getDocs,
+    collection, // returns collection ref
+    doc, // returns document ref
+    getDoc, // get snapshot of document
+    getDocs, // get snapshot of collection or query
     query,
     where,
 } from 'firebase/firestore/lite';
 
 const vansCollectionRef = collection(db, 'vans')
 
+export async function tryCatchDecorator(func) {
+    try {
+        const data = await func();
+        return {
+            success: true,
+            data,
+        }
+    } catch (err) {
+        return {
+            success: false,
+            message: err.message,
+        }
+    }
+}
+
 export async function getVans() {
     const querySnapshot = await getDocs(vansCollectionRef);
-    const dataArr = querySnapshot.docs.map(doc => ({
+    const dataArray = querySnapshot.docs.map(doc => ({
         ...doc.data(),
-        id: doc.id
+        id: doc.id,
     }))
-    console.log(dataArr);
-    return dataArr
+    return dataArray
+
+
 }
 
 export async function getVan(id) {
@@ -28,20 +44,6 @@ export async function getVan(id) {
         id: vanSnapshot.id,
     }
 }
-
-// export async function getVans(id) {
-//     const url = id ? `/api/vans/${id}` : "/api/vans"
-//     const res = await fetch(url)
-//     if (!res.ok) {
-//         throw {
-//             message: "Failed to fetch vans",
-//             statusText: res.statusText,
-//             status: res.status
-//         }
-//     }
-//     const data = await res.json()
-//     return data.vans
-// }
 
 export async function getHostVans() {
     const q = query(vansCollectionRef,
@@ -62,37 +64,4 @@ export async function getHostVan(id) {
         ...vanSnapshot.data(),
         id: vanSnapshot.id,
     }
-}
-
-
-
-// export async function getHostVans(id) {
-//     const url = id ? `/api/host/vans/${id}` : "/api/host/vans"
-//     const res = await fetch(url)
-//     if (!res.ok) {
-//         throw {
-//             message: "Failed to fetch vans",
-//             statusText: res.statusText,
-//             status: res.status
-//         }
-//     }
-//     const data = await res.json()
-//     return data.vans
-// }
-
-export async function loginUser(creds) {
-    const res = await fetch("/api/login",
-        { method: "post", body: JSON.stringify(creds) }
-    )
-    const data = await res.json()
-
-    if (!res.ok) {
-        throw {
-            message: data.message,
-            statusText: res.statusText,
-            status: res.status
-        }
-    }
-
-    return data
 }
