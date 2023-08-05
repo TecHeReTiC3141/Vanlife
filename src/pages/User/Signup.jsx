@@ -7,9 +7,10 @@ import {
     useActionData,
     Link,
 } from "react-router-dom"
-import { loginUser } from "../../../api"
+import { requireNonAuth } from "../../../utils";
 
-export function loader({ request }) {
+export const loader = (authContext) => async ({ request }) => {
+    await requireNonAuth(authContext, request);
     return new URL(request.url).searchParams.get("message")
 }
 

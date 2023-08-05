@@ -4,8 +4,8 @@ import { getHostVans } from "../../../api"
 import { requireAuth } from "../../../utils"
 import { BsStarFill } from "react-icons/bs"
 
-export async function loader({ request }) {
-    await requireAuth(request)
+export const loader = (authContext) => async ({ request}) => {
+    await requireAuth(authContext, request);
     return defer({ vans: getHostVans() })
 }
 

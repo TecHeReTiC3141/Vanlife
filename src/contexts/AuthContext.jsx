@@ -1,6 +1,11 @@
 import React from 'react';
 import { auth, checkNetworkConnectivity } from '../../firebase';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, } from 'firebase/auth';
+import { signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    signOut,
+    updatePassword,
+    updateEmail,
+} from 'firebase/auth';
 import {redirect} from "react-router-dom";
 
 const AuthContext = React.createContext();
@@ -40,15 +45,24 @@ function AuthProvider({ children }) {
         }
     }
 
+    async function logout() {
+        return await signOut(auth);
+    }
+
+    async function updateUser(email, password) {
+
+    }
+
     const value = {
         currentUser,
         signup,
         login,
+        logout,
     }
 
     return (
         <AuthContext.Provider value={value}>
-            { children }
+            {!loading && children }
         </AuthContext.Provider>
     );
 }
