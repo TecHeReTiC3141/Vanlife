@@ -20,6 +20,7 @@ import HostVanInfo from "./src/pages/Host/HostVanInfo"
 import HostVanPricing from "./src/pages/Host/HostVanPricing"
 import HostVanPhotos from "./src/pages/Host/HostVanPhotos"
 import AddVan, {action as addVanAction} from "./src/pages/Host/AddVan";
+import UpdateVan, {action as updateVanAction, loader as updateVanLoader} from "./src/pages/Host/UpdateVan";
 import NotFound from "./src/pages/NotFound"
 import Login, {loader as loginLoader, action as loginAction} from "./src/pages/User/Login"
 import Signup, {loader as signupLoader, action as signupAction} from "./src/pages/User/Signup"
@@ -125,6 +126,12 @@ function App() {
                     action={addVanAction(authContext)}
                 />
                 <Route
+                    path="vans/update/:id"
+                    element={<UpdateVan />}
+                    loader={updateVanLoader(authContext)}
+                    action={updateVanAction(authContext)}
+                />
+                <Route
                     path="vans/:id"
                     element={<HostVanDetail/>}
                     errorElement={<Error/>}
@@ -149,6 +156,7 @@ function App() {
                             await requireAuth(authContext, request)}
                     />
                 </Route>
+
             </Route>
             <Route path="*" element={<NotFound/>}/>
         </Route>

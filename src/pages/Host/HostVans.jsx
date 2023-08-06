@@ -5,7 +5,7 @@ import { requireAuth } from "../../../utils"
 
 export const loader = (authContext) => async ({ request }) => {
     const currentUser = await requireAuth(authContext, request);
-    return defer({ vans: await tryCatchDecorator(getHostVans)(currentUser.uid) })
+    return defer({ vans: tryCatchDecorator(getHostVans)(currentUser.uid) })
 }
 
 export default function HostVans() {

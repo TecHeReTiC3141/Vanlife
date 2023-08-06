@@ -9,7 +9,7 @@ import {
 import { getVans, tryCatchDecorator } from "../../../api"
 
 export async function loader() {
-    return defer({ vans: await tryCatchDecorator(getVans)() })
+    return defer({ vans: tryCatchDecorator(getVans)() })
 }
 
 /**
