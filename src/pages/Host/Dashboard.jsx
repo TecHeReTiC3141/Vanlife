@@ -1,34 +1,44 @@
 import React from "react"
 import { Link, defer, Await, useLoaderData } from "react-router-dom"
-import { getHostVans } from "../../../api"
+import {getHostVans, tryCatchDecorator} from "../../../api"
 import { requireAuth } from "../../../utils"
 import { BsStarFill } from "react-icons/bs"
 
 export const loader = (authContext) => async ({ request}) => {
-    await requireAuth(authContext, request);
-    return defer({ vans: getHostVans() })
+    const currentUser = await requireAuth(authContext, request);
+    return defer({ vans: await tryCatchDecorator(getHostVans)(currentUser.uid) })
 }
 
 export default function Dashboard() {
     const loaderData = useLoaderData()
 
-    function renderVanElements(vans) {
-        const hostVansEls = vans.map((van) => (
-            <div className="host-van-single" key={van.id}>
-                <img src={van.imageUrl} alt={`Photo of ${van.name}`} />
-                <div className="host-van-info">
-                    <h3>{van.name}</h3>
-                    <p>${van.price}/day</p>
-                </div>
-                <Link to={`vans/${van.id}`}>View</Link>
-            </div>
-        ))
+    function renderVanElements(vansData) {
 
-        return (
-            <div className="host-vans-list">
-                <section>{hostVansEls}</section>
-            </div>
-        )
+        if (vansData.success) {
+            const { data: vans } = vansData;
+            const hostVansEls = vans.map((van) => (
+                <div className="host-van-single" key={van.id}>
+                    <img src={van.imageUrl} alt={`Photo of ${van.name}`} />
+                    <div className="host-van-info">
+                        <h3>{van.name}</h3>
+                        <p>${van.price}/day</p>
+                    </div>
+                    <Link to={`vans/${van.id}`}>View</Link>
+                </div>
+            ))
+
+            return (
+                <div className="host-vans-list">
+                    <section>{hostVansEls}</section>
+                </div>
+            )
+        } else {
+            const { message } = vansData;
+            return (
+                <h2>Error while loading vans: {message}</h2>
+            )
+        }
+
     }
 
     return (

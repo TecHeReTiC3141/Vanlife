@@ -19,6 +19,7 @@ import HostVanDetail, {loader as hostVanDetailLoader} from "./src/pages/Host/Hos
 import HostVanInfo from "./src/pages/Host/HostVanInfo"
 import HostVanPricing from "./src/pages/Host/HostVanPricing"
 import HostVanPhotos from "./src/pages/Host/HostVanPhotos"
+import AddVan, {action as addVanAction} from "./src/pages/Host/AddVan";
 import NotFound from "./src/pages/NotFound"
 import Login, {loader as loginLoader, action as loginAction} from "./src/pages/User/Login"
 import Signup, {loader as signupLoader, action as signupAction} from "./src/pages/User/Signup"
@@ -36,6 +37,9 @@ function App() {
 
     const authContext = useAuth();
 
+    const authenticationLoader = async ({request}) =>
+        await requireNonAuth(authContext, request);
+
     const router = createBrowserRouter(createRoutesFromElements(
         <Route path="/" element={<Layout/>}>
             <Route index element={<Home/>}/>
@@ -51,12 +55,9 @@ function App() {
                 path="reset-password"
                 element={<ResetPassword/>}
                 loader={async ({request}) =>
-                    await requireNonAuth(authContext, request)}
+                    await requireAuth(authContext, request)}
                 action={resetPasswordAction(authContext)}
             />
-
-
-
             <Route
                 path="signup"
                 element={<Signup/>}
@@ -115,6 +116,13 @@ function App() {
                     element={<HostVans/>}
                     errorElement={<Error/>}
                     loader={hostVansLoader(authContext)}
+                />
+                <Route
+                    path="add-van"
+                    element={<AddVan/>}
+                    loader={async ({request}) =>
+                        await requireAuth(authContext, request)}
+                    action={addVanAction(authContext)}
                 />
                 <Route
                     path="vans/:id"

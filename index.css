@@ -494,12 +494,6 @@ i[class*='van-type-'] {
     color: white;
 }
 
-.login-form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 500px;
-}
 
 .login-form > button {
     background-color: #FF8C38;

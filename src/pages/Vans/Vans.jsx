@@ -8,8 +8,8 @@ import {
 } from "react-router-dom"
 import { getVans, tryCatchDecorator } from "../../../api"
 
-export function loader() {
-    return defer({ vans: tryCatchDecorator(getVans) })
+export async function loader() {
+    return defer({ vans: await tryCatchDecorator(getVans)() })
 }
 
 /**
