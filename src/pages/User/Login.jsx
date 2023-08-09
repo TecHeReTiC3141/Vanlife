@@ -41,7 +41,7 @@ export default function Login() {
 
             <Form
                 method="post"
-                className="login-form"
+                className="text-center"
                 replace
             >
                 <input
@@ -60,6 +60,7 @@ export default function Login() {
                 <Link to="/reset-password" className="text-center decorated">Forgot password?</Link>
                 <button
                     disabled={navigation.state === "submitting"}
+                    className="bg-orange-500 text-white py-3 my-2 w-full rounded-md text-xl"
                 >
                     {navigation.state === "submitting"
                         ? "Logging in..."

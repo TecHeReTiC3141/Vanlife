@@ -19,6 +19,9 @@ import HostVanDetail, {loader as hostVanDetailLoader} from "./src/pages/Host/Hos
 import HostVanInfo from "./src/pages/Host/HostVanInfo"
 import HostVanPricing from "./src/pages/Host/HostVanPricing"
 import HostVanPhotos from "./src/pages/Host/HostVanPhotos"
+import AddVan, {action as addVanAction} from "./src/pages/Host/AddVan";
+import UpdateVan, {action as updateVanAction, loader as updateVanLoader} from "./src/pages/Host/UpdateVan";
+import DeleteVan, {action as deleteVanAction, loader as deleteVanLoader} from "./src/pages/Host/DeleteVan";
 import NotFound from "./src/pages/NotFound"
 import Login, {loader as loginLoader, action as loginAction} from "./src/pages/User/Login"
 import Signup, {loader as signupLoader, action as signupAction} from "./src/pages/User/Signup"
@@ -32,9 +35,14 @@ import Error from "./src/components/Error"
 import {requireAuth, requireNonAuth} from "./utils";
 import AuthProvider, {useAuth,} from './src/contexts/AuthContext';
 
+// TODO: create fancy loading element with spinner
+
 function App() {
 
     const authContext = useAuth();
+
+    const authenticationLoader = async ({request}) =>
+        await requireNonAuth(authContext, request);
 
     const router = createBrowserRouter(createRoutesFromElements(
         <Route path="/" element={<Layout/>}>
@@ -51,12 +59,9 @@ function App() {
                 path="reset-password"
                 element={<ResetPassword/>}
                 loader={async ({request}) =>
-                    await requireNonAuth(authContext, request)}
+                    await requireAuth(authContext, request)}
                 action={resetPasswordAction(authContext)}
             />
-
-
-
             <Route
                 path="signup"
                 element={<Signup/>}
@@ -117,6 +122,25 @@ function App() {
                     loader={hostVansLoader(authContext)}
                 />
                 <Route
+                    path="add-van"
+                    element={<AddVan/>}
+                    loader={async ({request}) =>
+                        await requireAuth(authContext, request)}
+                    action={addVanAction(authContext)}
+                />
+                <Route
+                    path="vans/update/:id"
+                    element={<UpdateVan />}
+                    loader={updateVanLoader(authContext)}
+                    action={updateVanAction(authContext)}
+                />
+                <Route
+                    path="vans/delete/:id"
+                    element={<DeleteVan />}
+                    loader={deleteVanLoader}
+                    action={deleteVanAction}
+                />
+                <Route
                     path="vans/:id"
                     element={<HostVanDetail/>}
                     errorElement={<Error/>}
@@ -141,6 +165,7 @@ function App() {
                             await requireAuth(authContext, request)}
                     />
                 </Route>
+
             </Route>
             <Route path="*" element={<NotFound/>}/>
         </Route>

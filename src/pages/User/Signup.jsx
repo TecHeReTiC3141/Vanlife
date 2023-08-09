@@ -67,6 +67,7 @@ export default function Signup() {
                 />
                 <button
                     disabled={navigation.state === "submitting"}
+                    className="bg-orange-500 text-white py-3 my-2 w-full rounded-md text-xl"
                 >
                     {navigation.state === "submitting"
                         ? "Signing up..."
