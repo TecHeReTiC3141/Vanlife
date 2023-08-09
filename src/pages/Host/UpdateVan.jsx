@@ -2,6 +2,7 @@ import React from 'react';
 import {defer, Await, Form, Link, redirect, useActionData, useLoaderData, useNavigation} from "react-router-dom";
 import { getHostVan, tryCatchDecorator, updateVan } from "../../../api";
 import { requireAuth } from "../../../utils";
+import Loading from "../../components/Loading";
 
 export const action = (AuthContext) => async({ request, params }) => {
     const { id } = params;
@@ -105,7 +106,7 @@ export default function UpdateVan() {
     }
     return (
         <section>
-            <React.Suspense fallback={<h2>Loading van...</h2>}>
+            <React.Suspense fallback={<Loading text="van"/>}>
                 <Await resolve={loaderPromise.van}>
                     {renderUpdateVanForm}
                 </Await>

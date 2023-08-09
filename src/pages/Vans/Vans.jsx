@@ -7,6 +7,7 @@ import {
     Await
 } from "react-router-dom"
 import { getVans, tryCatchDecorator } from "../../../api"
+import Loading from "../../components/Loading";
 
 export async function loader() {
     return defer({ vans: tryCatchDecorator(getVans)() })
@@ -119,7 +120,7 @@ export default function Vans() {
     return (
         <div className="van-list-container">
             <h1>Explore our van options</h1>
-            <React.Suspense fallback={<h2>Loading vans...</h2>}>
+            <React.Suspense fallback={<Loading text="all vans"/>}>
                 <Await resolve={dataPromise.vans}>
                     {renderVanElements}
                 </Await>

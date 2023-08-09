@@ -2,6 +2,7 @@ import React from "react"
 import { Link, useLoaderData, defer, Await } from "react-router-dom"
 import { getHostVans, tryCatchDecorator } from "../../../api"
 import { requireAuth } from "../../../utils"
+import Loading from '../../components/Loading';
 
 export const loader = (authContext) => async ({ request }) => {
     const currentUser = await requireAuth(authContext, request);
@@ -51,7 +52,7 @@ export default function HostVans() {
     return (
         <section className="w-full">
             <h1 className="text-2xl font-bold ml-4 mb-4">Your listed vans</h1>
-            <React.Suspense fallback={<h2>Loading vans...</h2>}>
+            <React.Suspense fallback={<Loading text={"your vans"}/>}>
                 <Await resolve={dataPromise.vans}>
                     {renderVanElements}
                 </Await>
