@@ -35,10 +35,8 @@ export default function HostVans() {
                 </Link>
             ))
             return (
-                <div className="host-vans-list">
-                    <section>
-                        {hostVansEls}
-                    </section>
+                <div className="flex flex-col gap-4 mx-4">
+                    {hostVansEls}
                 </div>
             )
         } else {
@@ -50,10 +48,9 @@ export default function HostVans() {
 
     }
 
-
     return (
         <section className="w-full">
-            <h1 className="text-2xl ml-4">Your listed vans</h1>
+            <h1 className="text-2xl font-bold ml-4 mb-4">Your listed vans</h1>
             <React.Suspense fallback={<h2>Loading vans...</h2>}>
                 <Await resolve={dataPromise.vans}>
                     {renderVanElements}

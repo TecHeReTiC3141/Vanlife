@@ -21,6 +21,7 @@ import HostVanPricing from "./src/pages/Host/HostVanPricing"
 import HostVanPhotos from "./src/pages/Host/HostVanPhotos"
 import AddVan, {action as addVanAction} from "./src/pages/Host/AddVan";
 import UpdateVan, {action as updateVanAction, loader as updateVanLoader} from "./src/pages/Host/UpdateVan";
+import DeleteVan, {action as deleteVanAction, loader as deleteVanLoader} from "./src/pages/Host/DeleteVan";
 import NotFound from "./src/pages/NotFound"
 import Login, {loader as loginLoader, action as loginAction} from "./src/pages/User/Login"
 import Signup, {loader as signupLoader, action as signupAction} from "./src/pages/User/Signup"
@@ -132,6 +133,12 @@ function App() {
                     element={<UpdateVan />}
                     loader={updateVanLoader(authContext)}
                     action={updateVanAction(authContext)}
+                />
+                <Route
+                    path="vans/delete/:id"
+                    element={<DeleteVan />}
+                    loader={deleteVanLoader}
+                    action={deleteVanAction}
                 />
                 <Route
                     path="vans/:id"

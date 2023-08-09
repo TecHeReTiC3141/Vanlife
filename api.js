@@ -8,6 +8,7 @@ import {
     where,
     addDoc,
     updateDoc,
+    deleteDoc,
 } from 'firebase/firestore/lite';
 
 const vansCollectionRef = collection(db, 'vans')
@@ -83,5 +84,9 @@ export async function createVan(data) {
 export async function updateVan(id, data) {
     const van = doc(db, "vans", id);
     await updateDoc(van, data);
+}
 
+export async function deleteVan(id) {
+    const van = doc(db, "vans", id);
+    await deleteDoc(van);
 }

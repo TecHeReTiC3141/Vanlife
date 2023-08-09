@@ -31,7 +31,7 @@ export default function UpdateProfile() {
 
             <Form
                 method="post"
-                className="login-form"
+                className="text-center"
                 replace
             >
                 <input
@@ -55,6 +55,7 @@ export default function UpdateProfile() {
                 />
                 <button
                     disabled={navigation.state === "submitting"}
+                    className="w-full bg-orange-500 rounded-md py-3 text-white"
                 >
                     {navigation.state === "submitting"
                         ? "Updating..."
