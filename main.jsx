@@ -34,6 +34,8 @@ import Error from "./src/components/Error"
 import {requireAuth, requireNonAuth} from "./utils";
 import AuthProvider, {useAuth,} from './src/contexts/AuthContext';
 
+// TODO: create fancy loading element with spinner
+
 function App() {
 
     const authContext = useAuth();

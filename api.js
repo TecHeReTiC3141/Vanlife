@@ -7,6 +7,7 @@ import {
     query,
     where,
     addDoc,
+    updateDoc,
 } from 'firebase/firestore/lite';
 
 const vansCollectionRef = collection(db, 'vans')
@@ -77,4 +78,10 @@ export async function createVan(data) {
         ...newVan.data(),
         id: newVan.id,
     };
+}
+
+export async function updateVan(id, data) {
+    const van = doc(db, "vans", id);
+    await updateDoc(van, data);
+
 }
