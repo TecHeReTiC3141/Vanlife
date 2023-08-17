@@ -34,6 +34,7 @@ import HostLayout from "./src/components/HostLayout"
 import Error from "./src/components/Error"
 import {requireAuth, requireNonAuth} from "./utils";
 import AuthProvider, {useAuth,} from './src/contexts/AuthContext';
+import Loading from './src/components/Loading';
 
 // TODO: create fancy loading element with spinner
 
@@ -48,6 +49,7 @@ function App() {
         <Route path="/" element={<Layout/>}>
             <Route index element={<Home/>}/>
             <Route path="about" element={<About/>}/>
+            <Route path="loading" element={<Loading/>}/>
             <Route
                 path="login"
                 element={<Login/>}

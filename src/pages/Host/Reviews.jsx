@@ -1,6 +1,8 @@
 import React from "react"
 import { BsStarFill } from "react-icons/bs"
 
+// TODO implement getting statistics about reviews (mean rating)
+
 export default function Reviews() {
     const reviewsData = [
         {
@@ -37,7 +39,7 @@ export default function Reviews() {
                 <div key={review.id}>
                     <div className="review">
                         {[...Array(review.rating)].map((_, i) => (
-                            <BsStarFill className="review-star" key={i} />
+                            <BsStarFill className="review-star inline" key={i} />
                         ))}
                         <div className="info">
                             <p className="name">{review.name}</p>

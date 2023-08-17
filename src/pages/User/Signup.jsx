@@ -19,15 +19,17 @@ export const action = (AuthContext) => async({ request }) => {
     const { signup } = AuthContext;
 
     const formData = await request.formData()
-    const email = formData.get("email")
-    const password = formData.get("password")
-    const passwordConfirm = formData.get("confirm-password")
+    const email = formData.get("email"),
+        password = formData.get("password"),
+        passwordConfirm = formData.get("confirm-password"),
+        name = formData.get("name"),
+        age = formData.get("age");
     console.log(email, password, passwordConfirm);
     if (password !== passwordConfirm) return "Passwords don't match"
     const pathname = new URL(request.url)
         .searchParams.get("redirectTo") || "/profile"
 
-    return signup(email, password, pathname);
+    return signup({ email, password, pathname, name, age });
 }
 
 export default function Signup() {
@@ -65,6 +67,15 @@ export default function Signup() {
                     placeholder="Confirm Password"
                     className="w-full mb-4 mt-1 border border-gray-400 focus:outline-blue-300 rounded py-1.5 indent-2"
                 />
+
+                <div className="flex gap-4">
+                    <input type="text" name="name" id="name" required  placeholder="Name"
+                           className="w-full mb-4 mt-1 border border-gray-400 focus:outline-blue-300 rounded py-1.5 indent-2"
+                    />
+                    <input type="number" name="age" id="age" required placeholder="Age" min="0"
+                           className="w-full mb-4 mt-1 border border-gray-400 focus:outline-blue-300 rounded py-1.5 indent-2"
+                    />
+                </div>
                 <button
                     disabled={navigation.state === "submitting"}
                     className="bg-orange-500 text-white py-3 my-2 w-full rounded-md text-xl"
