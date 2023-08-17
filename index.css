@@ -24,14 +24,14 @@ a {
     color: unset;
 }
 
-body::-webkit-scrollbar {
-  display: none;
-}
+/*body::-webkit-scrollbar {*/
+/*  display: none;*/
+/*}*/
 
-body {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+/*body {*/
+/*  -ms-overflow-style: none;*/
+/*  scrollbar-width: none;*/
+/*}*/
 
 .site-wrapper {
     min-height: 100vh;
