@@ -2,6 +2,8 @@ import React from "react"
 import { Link, useParams, useLocation, useLoaderData } from "react-router-dom"
 import { getVan } from "../../../api"
 
+// TODO: Add button which leads to Add review form
+
 export function loader({ params }) {
     return getVan(params.id)
 }

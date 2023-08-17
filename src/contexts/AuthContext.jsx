@@ -8,7 +8,7 @@ import { signInWithEmailAndPassword,
     sendPasswordResetEmail,
 } from 'firebase/auth';
 import {redirect} from "react-router-dom";
-import {createUser, getCurrentUser} from '../../api';
+import {createUser, getCurrentUser, updateUserData} from '../../api';
 
 const AuthContext = React.createContext();
 
@@ -53,7 +53,7 @@ function AuthProvider({ children }) {
         return await signOut(auth);
     }
 
-    async function updateUser(email, password) {
+    async function updateUser(email, password, data) {
         try {
             if (email !== currentUser.email) {
                 await updateEmail(auth.currentUser, email);
@@ -61,6 +61,8 @@ function AuthProvider({ children }) {
             if (password && password !== currentUser.password) {
                 await updatePassword(auth.currentUser, password);
             }
+            await updateUserData(currentUser.uid, data);
+            setCurrentUser(await getCurrentUser(currentUser.uid));
             return redirect('/profile');
         } catch(err) {
             return err.message;

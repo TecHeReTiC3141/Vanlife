@@ -107,3 +107,8 @@ export async function getCurrentUser(id) {
         ...userSnapshot.data(),
     }
 }
+
+export async function updateUserData(id, data) {
+    const userRef = doc(db, 'users', id);
+    await updateDoc(userRef, data);
+}
