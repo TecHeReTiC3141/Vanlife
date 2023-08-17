@@ -9,9 +9,11 @@ import {
     addDoc,
     updateDoc,
     deleteDoc,
+    setDoc,
 } from 'firebase/firestore/lite';
 
 const vansCollectionRef = collection(db, 'vans')
+const usersCollectionRef = collection(db, 'users')
 
 export function tryCatchDecorator(func) {
 
@@ -89,4 +91,19 @@ export async function updateVan(id, data) {
 export async function deleteVan(id) {
     const van = doc(db, "vans", id);
     await deleteDoc(van);
+}
+
+export async function createUser(id, data) {
+    console.log('in create user', id, data);
+    await setDoc(doc(db, 'users', id), data);
+}
+
+export async function getCurrentUser(id) {
+    if (!id) return null;
+    const userRef = doc(db, 'users', id);
+    const userSnapshot = await getDoc(userRef);
+    return {
+        uid: userSnapshot.id,
+        ...userSnapshot.data(),
+    }
 }

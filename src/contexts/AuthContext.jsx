@@ -8,6 +8,7 @@ import { signInWithEmailAndPassword,
     sendPasswordResetEmail,
 } from 'firebase/auth';
 import {redirect} from "react-router-dom";
+import {createUser, getCurrentUser} from '../../api';
 
 const AuthContext = React.createContext();
 
@@ -21,15 +22,18 @@ function AuthProvider({ children }) {
     const [loading, setLoading] = React.useState(true);
 
     React.useEffect(() => {
-        return auth.onAuthStateChanged(user => {
-            setCurrentUser(user);
+        return auth.onAuthStateChanged(async user => {
+            console.log('state changed', user);
+            setCurrentUser(await getCurrentUser(user?.uid));
             setLoading(false);
         })
     }, []);
 
-    async function signup(email, password) {
+    async function signup({ email, password, name, age }) {
         try {
             await createUserWithEmailAndPassword(auth, email, password);
+            console.log(auth.currentUser);
+            await createUser(auth.currentUser.uid, {email, name, age});
             return redirect('/profile');
         } catch (err) {
             return err.message;
@@ -38,7 +42,6 @@ function AuthProvider({ children }) {
 
     async function login(email, password, pathname) {
         try {
-            // await checkNetworkConnectivity(); // check network connectivity
             await signInWithEmailAndPassword(auth, email, password);
             return redirect(pathname);
         } catch (err) {

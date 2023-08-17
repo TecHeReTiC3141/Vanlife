@@ -22,7 +22,7 @@ function Profile() {
 
     return (
         <>
-            <h1 className="text-xl text-center font-bold my-3">User profile</h1>
+            <h1 className="text-xl text-center font-bold my-3">Hello, {user.name}</h1>
             { error &&
                 <h2 className="w-full bg-red-300 py-1 my-2 text-center rounded">{error}</h2>
             }
