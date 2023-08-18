@@ -66,7 +66,7 @@ export default function VanDetail() {
                             <p className="van-price"><span>${van.price}</span>/day</p>
                             <p>{van.description}</p>
                             <div className="flex justify-between w-full gap-4">
-                                <button className="link-button  grow">Rent this van</button>
+                                <button className="link-button grow">Rent this van</button>
                                 <button className="link-button grow bg-blue-400"
                                         onClick={() => {
                                             const addReview = document.querySelector('.add-review');
@@ -79,8 +79,8 @@ export default function VanDetail() {
                         </div>
                         <div
                             className="add-review transition-all duration-500 overflow-y-hidden h-0">
-                            <h2 className="text-2xl text-center my-4 underline">Add review of this van</h2>
-                            <Form className="w-full flex justify-around" method="POST">
+                            <Form className="w-full flex justify-around my-4 border border-orange-400 rounded-md p-2 shadow"
+                                  method="POST">
                                 <div className="">
                                     <h3 className="font-bold">How would you rate quality of this van? (Required)</h3>
                                     <StarRatings
@@ -92,7 +92,7 @@ export default function VanDetail() {
                                         className="block"
                                     />
 
-                                    <button className="link-button mt-4">
+                                    <button className="link-button bg-orange-400 rounded-md text-gray-100 mt-4">
                                         Send review
                                     </button>
 
@@ -138,6 +138,11 @@ export default function VanDetail() {
             )
         }
 
+        const { message } = reviewsData;
+        return (
+            <h2>Error while loading reviews: {message}</h2>
+        )
+
     }
 
 
@@ -155,7 +160,7 @@ export default function VanDetail() {
                 </Await>
             </Suspense>
 
-            <h3>Reviews: </h3>
+            <h3 className="text-2xl mt-4 ml-2">Reviews: </h3>
             <Suspense fallback={<Loading text="reviews" />}>
                 <Await resolve={reviewsPromise}>
                     {renderReviews}

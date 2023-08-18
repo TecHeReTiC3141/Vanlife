@@ -11,21 +11,25 @@ export default function Review({ review }) {
     const date = new Date(review.publishTime.seconds * 1000);
     const dateString = `${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
     return (
-        <div key={review.id} className="my-4 mx-2 bg-gray-100 p-2 rounded-md">
-            <div className="">
-                <div className="flex gap-2">
-                    {[...Array(review.stars)].map((_, i) => (
-                        <BsStarFill className="text-[#ff8c38]" key={i} />
-                    ))}
+        <>
+            <div key={review.id} className="my-4 mx-2 bg-gray-100 p-2 rounded-md">
+                <div className="">
+                    <div className="flex gap-2">
+                        {[...Array(review.stars)].map((_, i) => (
+                            <BsStarFill className="text-[#ff8c38]" key={i} />
+                        ))}
+                    </div>
+
+                    <div className="flex gap-2 my-2">
+                        <p className="font-bold">{review.userName},</p>
+                        <p className="date">{dateString}</p>
+                    </div>
+                    <p>{review.text}</p>
                 </div>
 
-                <div className="">
-                    <p className="name">{review.userName}</p>
-                    <p className="date">{dateString}</p>
-                </div>
-                <p>{review.text}</p>
             </div>
-            <hr />
-        </div>
+            <hr className="bg-orange-500 h-1 w-full rounded"/>
+        </>
+
     )
 }
