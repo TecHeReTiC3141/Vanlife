@@ -10,7 +10,7 @@ import {
 import Home from "./src/pages/Home"
 import About from "./src/pages/About"
 import Vans, {loader as vansLoader} from "./src/pages/Vans/Vans"
-import VanDetail, {loader as vanDetailLoader} from "./src/pages/Vans/VanDetail"
+import VanDetail, {loader as vanDetailLoader, action as vanDetailAction} from "./src/pages/Vans/VanDetail"
 import Dashboard, {loader as dashboardLoader} from "./src/pages/Host/Dashboard"
 import Income from "./src/pages/Host/Income"
 import Reviews from "./src/pages/Host/Reviews"
@@ -97,6 +97,7 @@ function App() {
                 element={<VanDetail/>}
                 errorElement={<Error/>}
                 loader={vanDetailLoader}
+                action={vanDetailAction(authContext)}
             />
 
             <Route path="host" element={<HostLayout/>}>

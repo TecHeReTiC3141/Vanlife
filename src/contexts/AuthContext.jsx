@@ -23,7 +23,6 @@ function AuthProvider({ children }) {
 
     React.useEffect(() => {
         return auth.onAuthStateChanged(async user => {
-            console.log('state changed', user);
             setCurrentUser(await getCurrentUser(user?.uid));
             setLoading(false);
         })
@@ -32,7 +31,6 @@ function AuthProvider({ children }) {
     async function signup({ email, password, name, age }) {
         try {
             await createUserWithEmailAndPassword(auth, email, password);
-            console.log(auth.currentUser);
             await createUser(auth.currentUser.uid, {email, name, age});
             return redirect('/profile');
         } catch (err) {

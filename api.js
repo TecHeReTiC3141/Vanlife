@@ -1,4 +1,4 @@
-import { db } from './firebase';
+import {db} from './firebase';
 import {
     collection, // returns collection ref
     doc, // returns document ref
@@ -10,14 +10,16 @@ import {
     updateDoc,
     deleteDoc,
     setDoc,
+    orderBy,
 } from 'firebase/firestore/lite';
 
-const vansCollectionRef = collection(db, 'vans')
-const usersCollectionRef = collection(db, 'users')
+const vansCollectionRef = collection(db, 'vans');
+const usersCollectionRef = collection(db, 'users');
+const reviewsCollectionRef = collection(db, 'reviews');
 
 export function tryCatchDecorator(func) {
 
-    return async function() {
+    return async function () {
         try {
             const data = await func.call(this, ...arguments);
             return {
@@ -33,6 +35,8 @@ export function tryCatchDecorator(func) {
     }
 
 }
+
+// Vans management
 
 export async function getVans() {
     const querySnapshot = await getDocs(vansCollectionRef);
@@ -93,6 +97,8 @@ export async function deleteVan(id) {
     await deleteDoc(van);
 }
 
+// Users CRUD
+
 export async function createUser(id, data) {
     console.log('in create user', id, data);
     await setDoc(doc(db, 'users', id), data);
@@ -111,4 +117,44 @@ export async function getCurrentUser(id) {
 export async function updateUserData(id, data) {
     const userRef = doc(db, 'users', id);
     await updateDoc(userRef, data);
+}
+
+// Reviews CRUD
+
+export async function createReview(userId, vanId, rating, reviewText) {
+    const curVan = await getVan(vanId);
+    const data = {
+        userId,
+        vanId,
+        stars: rating,
+        text: reviewText,
+        publishTime: new Date(),
+        hostId: curVan.hostId,
+
+    }
+
+    await addDoc(reviewsCollectionRef, data);
+}
+
+export async function getVanReviews(vanId) {
+    const q = query(reviewsCollectionRef,
+        where('vanId', '==', vanId),
+        orderBy('publishTime', 'desc'));
+
+    const reviewSnap = await getDocs(q);
+
+    async function proceedReview(rev) {
+        const user = await getDoc(doc(db, 'users', rev.data().userId));
+        return {
+            ...rev.data(),
+            id: rev.id,
+            userName: user.data().name,
+        }
+    }
+
+    const reviews = [];
+    for (let rev of reviewSnap.docs) {
+        reviews.push(await proceedReview(rev));
+    }
+    return reviews;
 }
