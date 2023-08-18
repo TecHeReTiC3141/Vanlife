@@ -1,4 +1,4 @@
-import { db } from './firebase';
+import {db} from './firebase';
 import {
     collection, // returns collection ref
     doc, // returns document ref
@@ -18,7 +18,7 @@ const reviewsCollectionRef = collection(db, 'reviews');
 
 export function tryCatchDecorator(func) {
 
-    return async function() {
+    return async function () {
         try {
             const data = await func.call(this, ...arguments);
             return {
@@ -133,4 +133,26 @@ export async function createReview(userId, vanId, rating, reviewText) {
     }
 
     await addDoc(reviewsCollectionRef, data);
+}
+
+export async function getVanReviews(vanId) {
+    const q = query(reviewsCollectionRef,
+        where('vanId', '==', vanId));
+
+    const reviewSnap = await getDocs(q);
+
+    async function proceedReview(rev) {
+        const user = await getDoc(doc(db, 'users', rev.data().userId));
+        return {
+            ...rev.data(),
+            id: rev.id,
+            userName: user.data().name,
+        }
+    }
+
+    const reviews = [];
+    for (let rev of reviewSnap.docs) {
+        reviews.push(await proceedReview(rev));
+    }
+    return reviews;
 }
