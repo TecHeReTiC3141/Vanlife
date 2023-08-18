@@ -10,6 +10,7 @@ import {
     updateDoc,
     deleteDoc,
     setDoc,
+    orderBy,
 } from 'firebase/firestore/lite';
 
 const vansCollectionRef = collection(db, 'vans');
@@ -137,7 +138,8 @@ export async function createReview(userId, vanId, rating, reviewText) {
 
 export async function getVanReviews(vanId) {
     const q = query(reviewsCollectionRef,
-        where('vanId', '==', vanId));
+        where('vanId', '==', vanId),
+        orderBy('publishTime', 'desc'));
 
     const reviewSnap = await getDocs(q);
 

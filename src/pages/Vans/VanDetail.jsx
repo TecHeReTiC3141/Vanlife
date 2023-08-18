@@ -7,6 +7,7 @@ import {getVan, createReview, getVanReviews, tryCatchDecorator} from "../../../a
 import StarRatings from "react-star-ratings";
 import Loading from '../../components/Loading'
 import Review from "../Review";
+import {useAuth} from "../../contexts/AuthContext";
 
 // TODO: Add button which leads to Add review form
 
@@ -30,7 +31,10 @@ export const action = AuthContext => async ({request, params}) => {
     console.log(rating, review);
     try {
         await createReview(currentUser.uid, vanId, rating, review);
-        return redirect('/vans');
+        const addReview = document.querySelector('.add-review');
+        addReview.classList.toggle('h-0');
+        addReview.classList.toggle('h-auto');
+        return redirect('');
     } catch (err) {
         return err.message;
     }
@@ -46,9 +50,23 @@ export default function VanDetail() {
 
     const [rating, setRating] = React.useState(0);
 
+    const { currentUser } = useAuth();
+
     function handleRatingChange(newRating) {
         setRating(newRating);
         document.getElementById('rating').value = newRating;
+    }
+
+    function handleAddReviewToggle() {
+        const loginMessage = document.querySelector('.login-message');
+        loginMessage.classList.add('hidden');
+        if (!currentUser) {
+            loginMessage.classList.remove('hidden');
+            return;
+        }
+        const addReview = document.querySelector('.add-review');
+        addReview.classList.toggle('h-0');
+        addReview.classList.toggle('h-auto');
     }
 
     function renderVanInfo(vansData) {
@@ -67,13 +85,11 @@ export default function VanDetail() {
                             <p>{van.description}</p>
                             <div className="flex justify-between w-full gap-4">
                                 <button className="link-button grow">Rent this van</button>
-                                <button className="link-button grow bg-blue-400"
-                                        onClick={() => {
-                                            const addReview = document.querySelector('.add-review');
-                                            addReview.classList.toggle('h-0');
-                                            addReview.classList.toggle('h-auto');
-                                        }}>
+                                <button className="link-button grow bg-blue-400 relative"
+                                        onClick={handleAddReviewToggle}>
                                     Add review of this van
+                                    <Link to="/login" className="login-message absolute bottom-[100%] left-[50%]
+                                    -translate-x-[50%] text-red-600 text-sm underline hidden">Log in first to add review</Link>
                                 </button>
                             </div>
                         </div>
@@ -92,7 +108,8 @@ export default function VanDetail() {
                                         className="block"
                                     />
 
-                                    <button className="link-button bg-orange-400 rounded-md text-gray-100 mt-4">
+                                    <button className="link-button bg-orange-400 rounded-md
+                                    text-gray-100 mt-4">
                                         Send review
                                     </button>
 
@@ -127,8 +144,12 @@ export default function VanDetail() {
         if (reviewsData.success) {
             const {data: reviews } = reviewsData;
             console.log(reviews);
+            if (!reviews.length) {
+                return <h3 className="text-2xl mt-4 ml-2">No reviews here. Right the first!</h3>
+            }
             return (
                 <div className="reviews">
+                    <h3 className="text-2xl mt-4 ml-2">Reviews: </h3>
                     {
                         reviews.map(rev => (
                             <Review review={rev}/>
@@ -160,7 +181,6 @@ export default function VanDetail() {
                 </Await>
             </Suspense>
 
-            <h3 className="text-2xl mt-4 ml-2">Reviews: </h3>
             <Suspense fallback={<Loading text="reviews" />}>
                 <Await resolve={reviewsPromise}>
                     {renderReviews}

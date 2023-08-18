@@ -18,6 +18,9 @@ export default function Review({ review }) {
                         {[...Array(review.stars)].map((_, i) => (
                             <BsStarFill className="text-[#ff8c38]" key={i} />
                         ))}
+                        {[...Array(5 - review.stars)].map((_, i) => (
+                            <BsStarFill className="text-gray-300" key={i} />
+                        ))}
                     </div>
 
                     <div className="flex gap-2 my-2">
