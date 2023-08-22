@@ -136,6 +136,20 @@ export async function createReview(userId, vanId, rating, reviewText) {
     await addDoc(reviewsCollectionRef, data);
 }
 
+async function proceedReview(rev, inHost=false) {
+    const user = await getDoc(doc(db, 'users', rev.data().userId));
+    let van;
+    if (inHost) {
+        van = await getDoc(doc(db, 'vans', rev.data().vanId));
+    }
+    return {
+        ...rev.data(),
+        id: rev.id,
+        userName: user.data().name,
+        vanName: inHost && van.data().name,
+    }
+}
+
 export async function getVanReviews(vanId) {
     const q = query(reviewsCollectionRef,
         where('vanId', '==', vanId),
@@ -143,18 +157,23 @@ export async function getVanReviews(vanId) {
 
     const reviewSnap = await getDocs(q);
 
-    async function proceedReview(rev) {
-        const user = await getDoc(doc(db, 'users', rev.data().userId));
-        return {
-            ...rev.data(),
-            id: rev.id,
-            userName: user.data().name,
-        }
-    }
-
     const reviews = [];
     for (let rev of reviewSnap.docs) {
         reviews.push(await proceedReview(rev));
     }
     return reviews;
 }
+
+export async function getHostReviews(hostId) {
+    const q = query(reviewsCollectionRef, 
+        where('hostId', '==', hostId));
+    const reviewsSnap = await getDocs(q);
+
+    
+    const reviews = [];
+    for (let rev of reviewsSnap.docs) {
+        reviews.push(await proceedReview(rev, true));
+    }
+    return reviews;
+}
+

@@ -23,6 +23,10 @@ export const action = AuthContext => async ({request, params}) => {
     if (!currentUser) {
         return 'You must login first to make a review'
     }
+    const hostOwnerId = document.querySelector('.van-detail-container').dataset.owner;
+    if (hostOwnerId === currentUser.uid) {
+        return "You can't make review of your own van!";
+    }
     const {id: vanId} = params;
 
     const formData = await request.formData();
@@ -74,7 +78,7 @@ export default function VanDetail() {
             const {data: van} = vansData;
             return (
                 <>
-                    <div className="van-detail-container">
+                    <div className="van-detail-container" data-owner={van.hostId}>
                         <div className="van-detail">
                             <img src={van.imageUrl}/>
                             <i className={`van-type ${van.type} selected`}>
@@ -145,7 +149,7 @@ export default function VanDetail() {
             const {data: reviews } = reviewsData;
             console.log(reviews);
             if (!reviews.length) {
-                return <h3 className="text-2xl mt-4 ml-2">No reviews here. Right the first!</h3>
+                return <h3 className="text-2xl mt-4 ml-4">No reviews here. Write the first!</h3>
             }
             return (
                 <div className="reviews">

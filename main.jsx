@@ -13,7 +13,7 @@ import Vans, {loader as vansLoader} from "./src/pages/Vans/Vans"
 import VanDetail, {loader as vanDetailLoader, action as vanDetailAction} from "./src/pages/Vans/VanDetail"
 import Dashboard, {loader as dashboardLoader} from "./src/pages/Host/Dashboard"
 import Income from "./src/pages/Host/Income"
-import Reviews from "./src/pages/Host/Reviews"
+import Reviews, {loader as reviewsLoader} from "./src/pages/Host/Reviews"
 import HostVans, {loader as hostVansLoader} from "./src/pages/Host/HostVans"
 import HostVanDetail, {loader as hostVanDetailLoader} from "./src/pages/Host/HostVanDetail"
 import HostVanInfo from "./src/pages/Host/HostVanInfo"
@@ -115,8 +115,7 @@ function App() {
                 <Route
                     path="reviews"
                     element={<Reviews/>}
-                    loader={async ({request}) =>
-                        await requireAuth(authContext, request)}
+                    loader={reviewsLoader(authContext)}
                 />
                 <Route
                     path="vans"

@@ -2,6 +2,7 @@ import React from 'react';
 import {BsStarFill} from "react-icons/bs";
 
 import {getCurrentUser} from "../../api";
+import { Link } from 'react-router-dom';
 
 export default function Review({ review }) {
     const monthNames = ["January", "February", "March", "April", "May", "June",
@@ -14,13 +15,14 @@ export default function Review({ review }) {
         <>
             <div key={review.id} className="my-4 mx-2 bg-gray-100 p-2 rounded-md">
                 <div className="">
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 items-center">
                         {[...Array(review.stars)].map((_, i) => (
                             <BsStarFill className="text-[#ff8c38]" key={i} />
                         ))}
                         {[...Array(5 - review.stars)].map((_, i) => (
                             <BsStarFill className="text-gray-300" key={i} />
                         ))}
+                        {review.vanName && <h4 class="underline">about <Link to={`../vans/${review.vanId}`}>{review.vanName}</Link></h4>}
                     </div>
 
                     <div className="flex gap-2 my-2">

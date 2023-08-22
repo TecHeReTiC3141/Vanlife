@@ -1,27 +1,49 @@
-import React from "react"
+import React, { Suspense } from "react"
 import { BsStarFill } from "react-icons/bs"
 import Review from '../Review';
+import { getHostReviews, tryCatchDecorator } from "../../../api";
+import { defer, useLoaderData, Await } from "react-router-dom";
+import Loading from "../../components/Loading";
+import { requireAuth } from "../../../utils";
 
+
+export const loader = authContext => async ({ request }) => {
+    const user = await requireAuth(authContext, request);
+    return defer({ reviewsPromise: tryCatchDecorator(getHostReviews)(user.uid) });
+} 
 // TODO implement getting statistics about reviews (mean rating)
 
 export default function Reviews() {
-    const reviewsData = [
-        {
-            rating: 5,
-            name: "Elliot",
-            date: "January 3, 2023",
-            text: "The beach bum is such an awesome van! Such a comfortable trip. We had it for 2 weeks and there was not a single issue. Super clean when we picked it up and the host is very comfortable and understanding. Highly recommend!",
-            id: "1",
-        },
-        {
-            rating: 5,
-            name: "Sandy",
-            date: "December 12, 2022",
-            text: "This is our third time using the Modest Explorer for our travels and we love it! No complaints, absolutely perfect!",
-            id: "2",
-        },
-    ]
-    
+
+    const { reviewsPromise } = useLoaderData();
+
+    function renderReviews(reviewsData) {
+        console.log(reviewsData);
+        if (reviewsData.success) {
+            const {data: reviews } = reviewsData;
+            console.log(reviews);
+            if (!reviews.length) {
+                return <h3 className="text-2xl mt-4 ml-4">No latest reviews yet</h3>
+            }
+            return (
+                <div className="reviews">
+                    <h3 className="text-2xl mt-4 ml-2">Reviews: </h3>
+                    {
+                        reviews.map(rev => (
+                            <Review review={rev}/>
+                        ))
+                    }
+                </div>
+            )
+        }
+
+        const { message } = reviewsData;
+        return (
+            <h2>Error while loading reviews: {message}</h2>
+        )
+
+    }
+
     return (
         <section className="host-reviews">
             <div className="top-text">
@@ -35,10 +57,13 @@ export default function Reviews() {
                 src="/src/assets/images/reviews-graph.png"
                 alt="Review graph"
             />
-            <h3>Reviews (2)</h3>
-            {reviewsData.map((review) => (
-                <Review review={review} />
-            ))}
+
+            <Suspense fallback={<Loading text="your reviews" />}>
+                <Await resolve={reviewsPromise}>
+                    {renderReviews}
+                </Await>
+
+            </Suspense>
         </section>
     )
 }
