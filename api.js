@@ -13,6 +13,10 @@ import {
     orderBy,
 } from 'firebase/firestore/lite';
 
+import { storage } from './firebase';
+import { ref, uploadBytes } from 'firebase/storage';
+
+
 const vansCollectionRef = collection(db, 'vans');
 const usersCollectionRef = collection(db, 'users');
 const reviewsCollectionRef = collection(db, 'reviews');
@@ -99,9 +103,12 @@ export async function deleteVan(id) {
 
 // Users CRUD
 
-export async function createUser(id, data) {
-    console.log('in create user', id, data);
+export async function createUser(id, data, avatarBlob) {
+    console.log('in create user', id, data, avatarBlob);
     await setDoc(doc(db, 'users', id), data);
+    const avatarRef = ref(storage, `images/avatars/${id}`);
+    await uploadBytes(avatarRef, avatarBlob);
+
 }
 
 export async function getCurrentUser(id) {

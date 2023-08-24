@@ -7,3 +7,4 @@ dist/
 /.idea/vanlife_react_router.iml
 /.idea/vcs.xml
 /.env.local
+list.todo

@@ -28,10 +28,10 @@ function AuthProvider({ children }) {
         })
     }, []);
 
-    async function signup({ email, password, name, age }) {
+    async function signup({ email, password, name, age, avatarBlob }) {
         try {
             await createUserWithEmailAndPassword(auth, email, password);
-            await createUser(auth.currentUser.uid, {email, name, age});
+            await createUser(auth.currentUser.uid, {email, name, age}, avatarBlob);
             return redirect('/profile');
         } catch (err) {
             return err.message;
