@@ -14,7 +14,7 @@ import {
 } from 'firebase/firestore/lite';
 
 import { storage } from './firebase';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytes, uploadString, getDownloadURL } from 'firebase/storage';
 
 
 const vansCollectionRef = collection(db, 'vans');
@@ -105,11 +105,13 @@ export async function deleteVan(id) {
 
 // Users CRUD
 
-export async function createUser(id, data, avatarBlob) {
-    console.log('in create user', id, data, avatarBlob);
+export async function createUser(id, data, avatarString) {
+    console.log('in create user', id, data, avatarString);
     await setDoc(doc(db, 'users', id), data);
     const avatarRef = ref(storage, `images/avatars/${id}`);
-    await uploadBytes(avatarRef, avatarBlob);
+    uploadString(avatarRef, avatarString, "base64").then(() => {
+        console.log('avatar string has been uploaded');
+    });
 
 }
 
@@ -117,6 +119,7 @@ export async function getCurrentUser(id) {
     if (!id) return null;
     const userRef = doc(db, 'users', id);
     const userSnapshot = await getDoc(userRef);
+    console.log(userSnapshot.data());
     return {
         uid: userSnapshot.id,
         ...userSnapshot.data(),

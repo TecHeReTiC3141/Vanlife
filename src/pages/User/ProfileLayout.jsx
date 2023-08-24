@@ -6,8 +6,11 @@ import { useAuth } from '../../contexts/AuthContext';
 
 export const loader = (authContext) => async ({ request}) => {
     const user = await requireAuth(authContext, request);
-    return {user, 
-        avatarURL: await getUserAvatar(user.uid) };
+    return {
+        user, 
+        avatarURL: await getUserAvatar(user.uid) 
+
+    };
 }
 
 function ProfileLayout() {

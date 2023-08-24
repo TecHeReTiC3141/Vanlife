@@ -26,21 +26,18 @@ export const action = (AuthContext) => async({ request }) => {
         password = formData.get("password"),
         passwordConfirm = formData.get("confirm-password"),
         name = formData.get("name"),
-        age = formData.get("age");
+        age = formData.get("age"),
+        avatarString = formData.get("avatar-url");
 
 
-    console.log(email, password, passwordConfirm);
+    console.log(email, password, passwordConfirm, avatarString);
     if (password !== passwordConfirm) return "Passwords don't match"
     const pathname = new URL(request.url)
         .searchParams.get("redirectTo") || "/profile"
     
-    // const url = document.querySelector(".avatar-display").src;
-    // console.log('collecting avatar', url);
-    // const avatarBlob = await fetch(url).then(r => r.blob());
-    // console.log(avatarBlob);
-    const avatarBlob = document.querySelector('#avatar').files[0];
-    console.log('avatarBlob', avatarBlob)
-    return signup({ email, password, pathname, name, age, avatarBlob });
+    // const avatarBlob = document.querySelector('#avatar').files[0];
+    // console.log('avatarBlob', avatarBlob)
+    return signup({ email, password, pathname, name, age, avatarString });
 }
 
 export default function Signup() {
@@ -57,8 +54,18 @@ export default function Signup() {
             }],
         }))[0];
         const avatarData = await avatarHandle.getFile();
-        const buffer = await avatarData.arrayBuffer();
-        const src = URL.createObjectURL(new Blob([buffer]));
+
+        const src = URL.createObjectURL(avatarData);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const base64String = reader.result
+                .replace('data:', '')
+                .replace(/^.+,/, '');
+            
+            document.getElementById('avatar-url').value = base64String;
+        }
+        reader.readAsDataURL(avatarData);
+        console.log(src);
         document.querySelector(".avatar-display").src = src;
     }
 
@@ -79,7 +86,8 @@ export default function Signup() {
                     <div className="w-full flex flex-col items-center">
                         <img src={userIcon} alt="user avatar" className="avatar-display w-48 cursor-pointer rounded-full"
                         onClick={handleAvatarUpload}/>
-                        <input type="file" name="avatar" id="avatar" />
+                      
+                        <input type="text" name="avatar-url" id="avatar-url" className="hidden"/>
                     </div>
                     <div>
                         <input
