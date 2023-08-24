@@ -14,12 +14,14 @@ import {
 } from 'firebase/firestore/lite';
 
 import { storage } from './firebase';
-import { ref, uploadBytes } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 
 const vansCollectionRef = collection(db, 'vans');
 const usersCollectionRef = collection(db, 'users');
 const reviewsCollectionRef = collection(db, 'reviews');
+
+const avatarsRef = ref(storage, 'images/avatars');
 
 export function tryCatchDecorator(func) {
 
@@ -119,6 +121,11 @@ export async function getCurrentUser(id) {
         uid: userSnapshot.id,
         ...userSnapshot.data(),
     }
+}
+
+export async function getUserAvatar(id) {
+    const avatarRef = ref(avatarsRef, id);
+    return await getDownloadURL(avatarRef);
 }
 
 export async function updateUserData(id, data) {

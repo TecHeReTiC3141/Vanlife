@@ -6,7 +6,7 @@ import { useAuth } from '../../contexts/AuthContext';
 function Profile() {
     const { logout } = useAuth();
 
-    const { user } = useOutletContext();
+    const { user, avatarURL } = useOutletContext();
     const navigate = useNavigate();
     const [error, setError] = React.useState(null);
 
@@ -27,6 +27,7 @@ function Profile() {
                 <h2 className="w-full bg-red-300 py-1 my-2 text-center rounded">{error}</h2>
             }
             <h2><span className="font-bold">User email:</span> {user.email}</h2>
+            <img src={avatarURL} alt="user avatar" className="my-2 rounded-md" />
             <button onClick={() => navigate('update')}
                     className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded py-2
                         disabled:opacity-30">
